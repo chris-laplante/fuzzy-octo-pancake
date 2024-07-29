@@ -18,4 +18,5 @@ FROM debian:bookworm-slim AS runtime
 WORKDIR /app
 COPY --from=builder /app/target/release/progress-bar-test /progress-bar-test
 RUN chmod 0744 /progress-bar-test
-CMD ["/progress-bar-test"]
+RUN apt-get update && apt-get install -y expect
+CMD ["bash", "-c", "unbuffer /progress-bar-test >out.txt 2>&1; cat out.txt"]
